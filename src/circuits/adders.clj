@@ -23,36 +23,39 @@
     (half-adder ha1s b s ha2c uid-ha2 :del del2)
     (or-gate ha1c ha2c c1 uid-or :del del)))
 
-(def a (wire))
-(def b (wire))
-(def c0 (wire))
-(def s (wire))
-(def c1 (wire))
 
-(full-adder a b c0 s c1 "a1" :del 4)
 
-(probe c1 "c1")
-(probe s "s")
-(probe a "a")
-(probe b "b")
+(defn -main []
+  (def a (wire))
+  (def b (wire))
+  (def c0 (wire))
+  (def s (wire))
+  (def c1 (wire))
 
-(do
-  (println "starting....")
-  (sig! a 0)
-  (sig! b 0)
-  (future
-    (Thread/sleep 8000)
-    (println "switch 1")
-    (sig! a 1)
-    (sig! b 0)
-    (Thread/sleep 8000)
-    (println "switch 2")
+  (full-adder a b c0 s c1 "a1" :del 2)
+
+  (probe c1 "c1")
+  (probe s "s")
+  (probe a "a")
+  (probe b "b")
+
+  (do
+    (println "starting....")
     (sig! a 0)
-    (sig! b 1)
-    (Thread/sleep 8000)
-    (println "switch 3")
-    (sig! a 1)
-    (sig! b 1)) nil)
+    (sig! b 0)
+    (future
+      (Thread/sleep 4000)
+      (println "switch 1")
+      (sig! a 1)
+      (sig! b 0)
+      (Thread/sleep 4000)
+      (println "switch 2")
+      (sig! a 0)
+      (sig! b 1)
+      (Thread/sleep 4000)
+      (println "switch 3")
+      (sig! a 1)
+      (sig! b 1) nil) nil))
 
 
 

@@ -16,7 +16,7 @@
             (Thread/sleep delta)
             (condp
               not= @o
-                   old (print (str uid ":" @o "\n")))))]
+                   old (println (str uid ":" @o "\n")))))]
     (add-watch o :watch watch)))
 
 (defn invert
