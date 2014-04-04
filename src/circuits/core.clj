@@ -5,6 +5,19 @@
   [a v]
   (reset! (:i a) v))
 
+(defn probe
+  "place a probe on output of net and reports when its value has changed"
+  [net uid & {:keys [del] :or {del 1}}]
+  (let [o (:o net)
+        delta (* del 1000)
+        watch (fn [k a old new]
+                (future
+                  (Thread/sleep delta)
+                  (condp not= @o
+                              old (println
+                                    (str (str uid ":") @o)))))]
+    (add-watch o :watch watch)))
+
 (defn invert
   [x]
   (case x
@@ -14,16 +27,15 @@
 (defn inverter
   "This is a logical inverter
   b is set to !a after a delay"
-  [a b uid & {:keys [del] :or {:del 0}}]
+  [a b uid & {:keys [del] :or {del 0}}]
   (let [i1 (:o a)
         o1 (:i b)
-        delta (* del 100)
+        delta (* del 1000)
         do-invert!
         (fn [k a old new]
           (future
             (Thread/sleep delta)
-            (reset! o1 (invert @i1))
-            (println uid @o1) nil))]
+            (reset! o1 (invert @i1)) nil))]
     (add-watch i1 (keyword uid) do-invert!)
     (reset! o1 (invert @i1))
     {:d delta}))
@@ -67,10 +79,7 @@
           (fn [k a old new]
             (future
               (Thread/sleep delta)
-              (println "A" @i1)
-              (println "B" @i2)
-              (reset! o (func @i1 @i2))
-              (println uid @o) nil))]
+              (reset! o (func @i1 @i2)) nil))]
       (add-watch i1 (keyword uid) update!)
       (add-watch i2 (keyword uid) update!)
       (reset! o (func @i1 @i2))
@@ -91,30 +100,4 @@
 
 (def nand-gate
   (gate bit-nand))
-
-;(def a (wire))
-;(def b (wire :del 30))
-;(def c (wire))
-;(def d (wire))
-;(def e (wire))
-;(def f (wire))
-;(def a-p (wire))
-;
-;;; make some gates add different delays so output is more clear
-;(and-gate a b c "and1" :del 5)
-;(or-gate a b d "or1" :del 10)
-;(nand-gate a b e "nand1" :del 15)
-;(xor-gate a b f "xor1" :del 20)
-;(inverter a a-p "inv1" :del 2)
-;
-;(println "INIT")
-;(println "AND" @(:o c))
-;(println "OR" @(:o d))
-;(println "NAND" @(:o e))
-;(println "XOR" @(:o f))
-;(println "INV" @(:i a-p))
-;(println "STARTING")
-;(do
-;  (reset! (:i a) 1)
-;  (reset! (:i b) 1) nil)
 
