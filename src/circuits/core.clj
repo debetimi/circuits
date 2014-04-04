@@ -10,12 +10,13 @@
   [net uid & {:keys [del] :or {del 1}}]
   (let [o (:o net)
         delta (* del 1000)
-        watch (fn [k a old new]
-                (future
-                  (Thread/sleep delta)
-                  (condp not= @o
-                              old (println
-                                    (str (str uid ":") @o)))))]
+        watch
+        (fn [k a old new]
+          (future
+            (Thread/sleep delta)
+            (condp
+              not= @o
+                   old (print (str uid ":" @o "\n")))))]
     (add-watch o :watch watch)))
 
 (defn invert
