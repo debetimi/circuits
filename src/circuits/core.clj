@@ -16,7 +16,8 @@
             (Thread/sleep delta)
             (condp
               not= @o
-                   old (println (str uid ":" @o "\n")))))]
+                   old (do (print (str uid ":" @o "\n"))
+                         (flush)))))]
     (add-watch o :watch watch)))
 
 (defn invert
@@ -85,6 +86,17 @@
       (add-watch i2 (keyword uid) update!)
       (reset! o (func @i1 @i2))
       {:d delta})))
+
+
+(defn clk [freq uid]
+  (let [a (wire)
+        b (wire)
+        c (wire)
+        tr (/ 1 (* 3 freq))]
+    (inverter a b (str uid "1") :del tr)
+    (inverter b c (str uid "2") :del tr)
+    (inverter c a (str uid "3") :del tr)
+    c))
 
 (defn bit-nand
   [a b]

@@ -1,5 +1,6 @@
 (ns circuits.adders
-  (:require [circuits.core :refer :all ] :reload-all ))
+  (:require [circuits.core :refer :all ] :reload-all )
+  (:gen-class ))
 
 (defn half-adder
   "Half adder circuit"
