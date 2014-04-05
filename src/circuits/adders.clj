@@ -29,16 +29,14 @@
 (defn -main []
   (def a (wire))
   (def b (wire))
-  (def c0 (wire))
+  (def c0 (clk 4 "clk1"))
   (def s (wire))
   (def c1 (wire))
 
-  (full-adder a b c0 s c1 "a1" :del 2)
+  (full-adder a b c0 s c1 "a1" :del 1)
 
   (probe c1 "c1")
   (probe s "s")
-  (probe a "a")
-  (probe b "b")
 
   (do
     (println "starting....")
@@ -56,7 +54,8 @@
       (Thread/sleep 4000)
       (println "switch 3")
       (sig! a 1)
-      (sig! b 1) nil) nil))
+      (sig! b 1) nil) nil)
+  )
 
 
 

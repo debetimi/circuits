@@ -89,6 +89,8 @@
 
 
 (defn clk [freq uid]
+  "Simple ring oscillator, the input is frequency in seconds
+  output is a wire with clock signal"
   (let [a (wire)
         b (wire)
         c (wire)
