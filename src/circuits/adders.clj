@@ -24,6 +24,10 @@
     (half-adder ha1s b s ha2c uid-ha2 :del del2)
     (or-gate ha1c ha2c c1 uid-or :del del)))
 
+(defn test
+  "hoo barr"
+  [x]
+  (let [x (full-adder)] ()))
 
 
 (defn -main []
